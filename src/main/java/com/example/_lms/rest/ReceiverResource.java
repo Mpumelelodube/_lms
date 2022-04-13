@@ -67,9 +67,9 @@ public class ReceiverResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the receiver, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/receivers/{id}")
-    public Optional<Receiver> getReceiver(@PathVariable Long id) {
+    public Receiver getReceiver(@PathVariable Long id) {
         log.debug("REST request to get Receiver : {}", id);
-        Optional<Receiver> receiver = receiverService.findOne(id);
+        Receiver receiver = receiverService.findOne(id);
         return receiver;
     }
 
@@ -84,5 +84,9 @@ public class ReceiverResource {
     public void deleteReceiver(@PathVariable Long id) {
         log.debug("REST request to delete Receiver : {}", id);
          receiverService.delete(id);
+    }
+
+    public Receiver getSpecificReceiver(Long id) {
+        return receiverService.findOne(id);
     }
 }

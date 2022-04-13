@@ -97,9 +97,9 @@ public class ReceiverService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Receiver> findOne(Long id) {
+    public Receiver findOne(Long id) {
         log.debug("Request to get Receiver : {}", id);
-        return receiverRepository.findById(id);
+        return receiverRepository.findById(id).orElseThrow(() -> new  IllegalStateException ("receiver does not exist"));
     }
 
     /**

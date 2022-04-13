@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for managing {@link Branch}.
@@ -28,10 +27,12 @@ public class CityResource {
 
 
     private final CityService cityService;
+    private final CountryResource countryResource;
 
     @Autowired
-    public CityResource(CityService cityService) {
+    public CityResource(CityService cityService, CountryResource cityResource) {
         this.cityService = cityService;
+        this.countryResource = cityResource;
     }
 
     /**
@@ -57,7 +58,13 @@ public class CityResource {
     @GetMapping("/cities")
     public List<City> getAllCities() {
         log.debug("REST request to get all Cities");
-        return cityService.findAll();
+        List<City> cities = cityService.findAll();
+
+        for (int i = 0; i < cities.size(); i++){
+            cities.get(i).setCountryObject(countryResource.getSpecificCountry(cities.get(i).getCountry()));
+        }
+
+        return cities;
     }
 
 
@@ -71,11 +78,16 @@ public class CityResource {
     public City getCity(@PathVariable Long id) {
         log.debug("REST request to get City : {}", id);
         City city = cityService.findOne(id);
+        city.setCountryObject(countryResource.getSpecificCountry(city.getCountry()));
+
         return city;
     }
 
     public City getSpecificCity(Long id){
-        return cityService.findOne(id);
+        City city = cityService.findOne(id);
+        city.setCountryObject(countryResource.getSpecificCountry(city.getCountry()));
+
+        return city;
     }
 
     /**

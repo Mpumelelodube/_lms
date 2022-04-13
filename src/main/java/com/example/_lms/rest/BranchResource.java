@@ -164,4 +164,13 @@ public class BranchResource {
         log.debug("REST request to delete Branch : {}", id);
          branchService.delete(id);
     }
+
+    public Branch getSpecificBranch(Long id) {
+        Branch branch = branchService.findOne(id);
+        branch.setCountryObject(countryResource.getSpecificCountry(branch.getCountry()));
+        branch.setStateObject(stateResource.getSpecificState(branch.getState()));
+        branch.setCityObject(cityResource.getSpecificCity(branch.getCity()));
+
+        return branch;
+    }
 }

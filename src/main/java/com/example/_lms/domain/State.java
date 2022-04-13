@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "state")
 public class State {
@@ -26,32 +28,8 @@ public class State {
 //    @NotNull(message = "state name must not be null")
     private String name;
 
+    @Transient
+    private Country countryObject;
+    private long country;
 
-    private Country country;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @JoinColumn(name = "country_id", nullable = false)
-    @ManyToOne
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

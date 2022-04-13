@@ -26,10 +26,17 @@ public class ParcelResource {
 
 
     private final ParcelService parcelService;
+    private final SenderResource senderResource;
+    private final ReceiverResource receiverResource;
+    private final BranchResource branchResource;
+
 
     @Autowired
-    public ParcelResource(ParcelService parcelService) {
+    public ParcelResource(ParcelService parcelService, SenderResource senderResource, ReceiverResource receiverResource, BranchResource branchResource) {
         this.parcelService = parcelService;
+        this.senderResource = senderResource;
+        this.receiverResource = receiverResource;
+        this.branchResource = branchResource;
     }
 
 
@@ -61,7 +68,10 @@ public class ParcelResource {
         List<Parcel> parcels = parcelService.findAll();
 
         for (int i = 0; i < parcels.size(); i++){
-            parcels.se
+            parcels.get(i).setSenderObject(senderResource.getSpecificSender(parcels.get(i).getSender()));
+            parcels.get(i).setReceiverObject(receiverResource.getSpecificReceiver(parcels.get(i).getReceiver()));
+            parcels.get(i).setFromBranchObject(branchResource.getSpecificBranch(parcels.get(i).getFromBranch()));
+            parcels.get(i).setToBranchObject(branchResource.getSpecificBranch(parcels.get(i).getToBranch()));
         }
 
         return parcels;

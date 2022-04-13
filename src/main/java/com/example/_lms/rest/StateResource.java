@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for managing {@link State}.
@@ -28,10 +27,12 @@ public class StateResource {
 
 
     private final StateService stateService;
+    private final CountryResource countryResource;
 
     @Autowired
-    public StateResource(StateService stateService) {
+    public StateResource(StateService stateService, CountryResource countryResource) {
         this.stateService = stateService;
+        this.countryResource = countryResource;
     }
 
     /**
@@ -56,7 +57,13 @@ public class StateResource {
     @GetMapping("/states")
     public List<State> getAllStates() {
         log.debug("REST request to get all States");
-        return stateService.findAll();
+        List<State> states = stateService.findAll();
+
+        for (int i = 0; i < states.size(); i++){
+            states.get(i).setCountryObject(countryResource.getSpecificCountry(states.get(i).getCountry()));
+        }
+
+        return states;
     }
 
 
@@ -70,6 +77,8 @@ public class StateResource {
     public State getState(@PathVariable Long id) {
         log.debug("REST request to get State : {}", id);
         State state = stateService.findOne(id);
+        state.setCountryObject(countryResource.getSpecificCountry(state.getCountry()));
+
         return state;
     }
 
@@ -87,6 +96,8 @@ public class StateResource {
     }
 
     public State getSpecificState(Long id) {
-        return stateService.findOne(id);
+        State state = stateService.findOne(id);
+        state.setCountryObject(countryResource.getSpecificCountry(state.getCountry()));
+        return state;
     }
 }

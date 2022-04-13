@@ -67,9 +67,9 @@ public class SenderResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sender, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/senders/{id}")
-    public Optional<Sender> getSender(@PathVariable Long id) {
+    public Sender getSender(@PathVariable Long id) {
         log.debug("REST request to get Sender : {}", id);
-        Optional<Sender> sender = senderService.findOne(id);
+        Sender sender = senderService.findOne(id);
         return sender;
     }
 
@@ -84,5 +84,9 @@ public class SenderResource {
     public void deleteSender(@PathVariable Long id) {
         log.debug("REST request to delete Sender : {}", id);
          senderService.delete(id);
+    }
+
+    public Sender getSpecificSender(Long id) {
+        return senderService.findOne(id);
     }
 }

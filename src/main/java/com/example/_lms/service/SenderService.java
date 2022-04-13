@@ -95,9 +95,9 @@ public class SenderService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Sender> findOne(Long id) {
+    public Sender findOne(Long id) {
         log.debug("Request to get Sender : {}", id);
-        return senderRepository.findById(id);
+        return senderRepository.findById(id).orElseThrow(() -> new  IllegalStateException ("sender does not exist"));
     }
 
     /**
